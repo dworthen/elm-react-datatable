@@ -134,12 +134,12 @@ update msg model =
 -- SUBSCRIPTIONS
 
 
-port recievedNewTableState : (SimpleState -> msg) -> Sub msg 
+port tableState : (SimpleState -> msg) -> Sub msg 
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    recievedNewTableState RecievedNewTableState
+    tableState RecievedNewTableState
 
 
 -- VIEW

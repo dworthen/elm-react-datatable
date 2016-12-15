@@ -3,11 +3,41 @@ import { render } from 'react-dom';
 
 import Table from './src/react/Table';
 
+
+let data = [
+    ["George Washington", "1732"]
+    , ["John Adams", "1735"]
+    , ["Thomas Jefferson", "1743"]
+    , ["Ander Jackson", "1767"]
+    , ["William Henry Harrison", "1773"]
+];
+
+let columns = ["Names", "Year"];
+
+let canHide = [true, ""];
+let canClose = [true, ""];
+let canFilter = [true, ""];
+
+let filters = [];
+let hiddenColumns = [];
+
+let sortBy = "Names";
+let sortOrder = "Asc";
+
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            pageSize : 10
+            data,
+            columns,
+            canHide,
+            canClose,
+            canFilter,
+            filters,
+            hiddenColumns,
+            sortBy,
+            sortOrder
         };
     }
 
@@ -22,9 +52,19 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <Table pageSize={this.state.pageSize} />
+                <Table 
+                    data={this.state.data}
+                    columns={this.state.columns}
+                    canHide={this.state.canHide}
+                    canClose={this.state.canClose}
+                    canFilter={this.state.canFilter}
+                    filters={this.state.filters}
+                    hiddenColumns={this.state.hiddenColumns}
+                    sortBy={this.state.sortBy}
+                    sortOrder={this.state.sortOrder}
+                 />
             </div>
-        )
+        );
     }
 
 }

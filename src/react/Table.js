@@ -29,7 +29,7 @@ class Table extends React.Component {
         });
 
         ports.updateTableState.subscribe(state => {
-            ports.recievedNewTableState.send(state);
+            ports.tableState.send(state);
         });
 
     }
@@ -41,6 +41,18 @@ class Table extends React.Component {
             </div>
         );
     } 
+}
+
+Table.propTypes = {
+    data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string).isRequired).isRequired,
+    columns: PropTypes.arrayOf(PropTypes.string).isRequired,
+    filters: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+    hiddenColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
+    canHide: PropTypes.array.isRequired,
+    canClose: PropTypes.array.isRequired,
+    canFilter: PropTypes.array.isRequired,
+    sortBy: PropTypes.string.isRequired,
+    sortOrder: PropTypes.string.isRequired
 }
 
 
