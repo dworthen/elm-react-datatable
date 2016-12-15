@@ -23,10 +23,29 @@ class Table extends React.Component {
         return false;
     }
 
+    constructTableState() {
+        return {
+            sortBy: this.props.sortBy,
+            sortOrder: this.props.sortOrder,
+            filters: this.props.filters,
+            hiddenColumns: this.props.hiddenColumns
+        };
+    }
+
+    
+
     configurePorts(ports) {
+        console.log("=== Table Component Configuring Ports ===");
         this.setState({
             ports: ports 
         });
+
+        ports.canHide.send(this.props.canHide);
+        ports.canSort.send(this.props.canSort);
+        ports.canFilter.send(this.props.canFilter);
+        ports.columns.send(this.props.columns);
+        ports.tableState.send(this.constructTableState());
+        ports.data.send(this.props.data);
 
         ports.updateTableState.subscribe(state => {
             ports.tableState.send(state);
@@ -49,7 +68,7 @@ Table.propTypes = {
     filters: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
     hiddenColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
     canHide: PropTypes.array.isRequired,
-    canClose: PropTypes.array.isRequired,
+    canSort: PropTypes.array.isRequired,
     canFilter: PropTypes.array.isRequired,
     sortBy: PropTypes.string.isRequired,
     sortOrder: PropTypes.string.isRequired

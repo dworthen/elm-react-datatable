@@ -15,7 +15,7 @@ let data = [
 let columns = ["Names", "Year"];
 
 let canHide = [true, ""];
-let canClose = [true, ""];
+let canSort = [true, ""];
 let canFilter = [true, ""];
 
 let filters = [];
@@ -32,7 +32,7 @@ class App extends React.Component {
             data,
             columns,
             canHide,
-            canClose,
+            canSort,
             canFilter,
             filters,
             hiddenColumns,
@@ -56,7 +56,7 @@ class App extends React.Component {
                     data={this.state.data}
                     columns={this.state.columns}
                     canHide={this.state.canHide}
-                    canClose={this.state.canClose}
+                    canSort={this.state.canSort}
                     canFilter={this.state.canFilter}
                     filters={this.state.filters}
                     hiddenColumns={this.state.hiddenColumns}
