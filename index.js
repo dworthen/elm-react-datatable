@@ -44,7 +44,7 @@ class App extends React.Component {
     componentDidMount() {
         // setTimeout(() => {
         //     this.setState({
-        //         pageSize : 20
+        //         canFilter : [false, ""]
         //     });
         // }, 3000);
     }
