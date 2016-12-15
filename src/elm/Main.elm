@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import Html exposing (..)
 import Html.App as App
@@ -22,18 +22,28 @@ main =
 
 
 type alias Model =
-    { name : String
-    , tableState : Table.State
-    , presidents : List Person
+    { tableState : Table.State
+    , tableConfig : Table.ViewConfig (List String) Msg
+    , data : List (List String)
+    }
+
+
+initialViewConfig : Table.ViewConfig (List String) Msg
+initialViewConfig =
+    { columns = [ Table.stringColumn "Year" (getListItem 0) Nothing ]
+    , canHide = (True, "")
+    , canSort = (True, "")
+    , canFilter = (True, "")
+    , toMsg = UpdateTableState
     }
 
 
 model : Model
 model =
     let
-        tableState = Table.State "Name" Table.Asc [] []
+        tableState = Table.State "Year" Table.Asc [] []
     in
-        Model "Derek" tableState presidents
+        Model tableState initialViewConfig [ ["1700"], ["1800"], ["1900"] ]
 
 
 init : ( Model, Cmd Msg )
@@ -41,20 +51,80 @@ init =
     ( model, Cmd.none )
 
 
+getListItem : Int -> List String -> String
+getListItem ind items =
+    items
+        |> Array.fromList
+        |> Array.get ind
+        |> Maybe.withDefault ""
+
+
 
 -- UPDATE
 
 
+type alias SimpleState = 
+    { sortBy : String
+    , sortOrder : String
+    , filters : List (String, String)
+    , hiddenColumns : List String
+    }
+
+
+sortOrderToString : Table.SortOrder -> String
+sortOrderToString sort =
+    case sort of
+        Table.Asc -> "Asc"
+        Table.Desc -> "Desc"
+
+
+stringToSortOrder : String -> Table.SortOrder
+stringToSortOrder order =
+    if order == "Desc" then
+        Table.Desc
+    else
+        Table.Asc
+
+
+toSimpleState : Table.State -> SimpleState
+toSimpleState {sortBy, sortOrder, filters, hiddenColumns} =
+    let
+        newOrder = sortOrderToString sortOrder
+    in
+        SimpleState sortBy newOrder filters hiddenColumns
+
+
+toState : SimpleState -> Table.State
+toState {sortBy, sortOrder, filters, hiddenColumns} =
+    let
+        newOrder = stringToSortOrder sortOrder
+    in
+        Table.State sortBy newOrder filters hiddenColumns
+
+
+-- PORTS
+
+port updateTableState : SimpleState -> Cmd msg
+
+
 type Msg
-    = Something
-    | UpdateTableState Table.State
+    = UpdateTableState Table.State
+    | RecievedNewTableState SimpleState
+    | RecievedNewTableConfig (Table.ViewConfig (List String) Msg) 
+    | RecievedNewData List (List String)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of 
         UpdateTableState newTableState ->
-            ( { model | tableState = newTableState }, Cmd.none )
+            ( model, updateTableState (toSimpleState newTableState) )
+
+        RecievedNewTableState simpleState ->
+            let
+                newTableState = toState simpleState
+            in
+                ( { model | tableState = newTableState }, Cmd.none )
 
         _ ->
             ( model, Cmd.none )
@@ -64,9 +134,12 @@ update msg model =
 -- SUBSCRIPTIONS
 
 
+port recievedNewTableState : (SimpleState -> msg) -> Sub msg 
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    recievedNewTableState RecievedNewTableState
 
 
 -- VIEW
@@ -75,7 +148,7 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     div []
-        [ Table.view tableViewConfig model.tableState model.presidents
+        [ Table.view model.tableConfig model.tableState model.data
         ]
 
 

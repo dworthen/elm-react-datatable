@@ -3,14 +3,46 @@ import Elm from 'react-elm-components';
 import { Main } from '../elm/Main.elm';
 
 
-const Table = () => (
-    <div>
-        <Elm src={Main} />
-    </div>
-);
+class Table extends React.Component {
 
-function test() {
-    console.log('test');
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
+    componentDidMount() {
+        console.log("=== Table Component Mounted ===");
+    }
+
+    componentWillReceiveProps() {
+        console.log("=== Table Component Will Recieve Props ===");
+    }
+
+    shouldComponentUpdate() {
+        console.log("=== Table Will Update ===");
+        return false;
+    }
+
+    configurePorts(ports) {
+        this.setState({
+            ports: ports 
+        });
+
+        ports.updateTableState.subscribe(state => {
+            ports.recievedNewTableState.send(state);
+        });
+
+    }
+
+    render() {
+        return (
+            <div>
+                <Elm src={Main} ports={this.configurePorts.bind(this)} />
+            </div>
+        );
+    } 
 }
+
+
 
 export default Table
