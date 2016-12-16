@@ -114,17 +114,21 @@ updateColumns viewConfig columns =
 
 -- PORTS
 
-port updateTableState : SimpleState -> Cmd msg
+port updateSorting : { sortBy: String, sortOrder: String } -> Cmd msg
+port updateFilters : List (String, String) -> Cmd msg
+port updateHiddenColumns : List String -> Cmd msg
 
 
 type Msg
     = UpdateTableState Table.State
-    | NewTableState SimpleState
     | NewColumns (List String)
     | NewData (List (List String))
     | CanHide (Bool, String)
     | CanSort (Bool, String)
     | CanFilter (Bool, String)
+    | Sort (String, String)
+    | Filter (List (String, String))
+    | HiddenColumns (List String)
     | SomethingElse
 
 
@@ -132,13 +136,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of 
         UpdateTableState newTableState ->
-            ( model, updateTableState (toSimpleState newTableState) )
-
-        NewTableState simpleState ->
-            let
-                newTableState = toState simpleState
-            in
-                ( { model | tableState = newTableState }, Cmd.none )
+            ( model, letTheWorldKnowTheTableStateUpdated model.tableState newTableState )
 
         NewColumns cols ->
             let
@@ -169,32 +167,72 @@ update msg model =
                 newTableConfig = { tableConfig | canFilter = newCanFilter }
             in
                 ( { model | tableConfig = newTableConfig }, Cmd.none )
+
+        Sort (field, order) -> 
+            let 
+                newOrder = stringToSortOrder order
+                { tableState } = model
+                newTableState = { tableState | sortBy = field, sortOrder = newOrder }
+            in 
+                ( { model | tableState = newTableState }, Cmd.none )
+
+        Filter newFilters ->
+            let
+                { tableState } = model
+                newTableState = { tableState | filters = newFilters }
+            in 
+                ( { model | tableState = newTableState }, Cmd.none )    
+
+        HiddenColumns newHiddenColumns ->
+            let
+                { tableState } = model
+                newTableState = { tableState | hiddenColumns = newHiddenColumns }
+            in 
+                ( { model | tableState = newTableState }, Cmd.none )  
               
         _ ->
             ( model, Cmd.none )
 
 
+letTheWorldKnowTheTableStateUpdated : Table.State -> Table.State -> Cmd Msg
+letTheWorldKnowTheTableStateUpdated currentState newState =
+    if currentState.sortBy /= newState.sortBy || currentState.sortOrder /= newState.sortOrder then
+        updateSorting {
+            sortBy = newState.sortBy,
+            sortOrder = sortOrderToString newState.sortOrder 
+        }
+    else if currentState.filters /= newState.filters then
+        updateFilters newState.filters
+    else if currentState.hiddenColumns /= newState.hiddenColumns then
+        updateHiddenColumns newState.hiddenColumns
+    else
+        Cmd.none
+
 
 -- SUBSCRIPTIONS
 
 
-port tableState : (SimpleState -> msg) -> Sub msg 
 port columns : (List String -> msg) -> Sub msg
 port data : (List (List String) -> msg) -> Sub msg
 port canHide : ((Bool, String) -> msg) -> Sub msg
 port canSort : ((Bool, String) -> msg) -> Sub msg
 port canFilter : ((Bool, String) -> msg) -> Sub msg
+port sort : ((String, String) -> msg) -> Sub msg
+port filter : (List (String, String) -> msg) -> Sub msg
+port hiddenColumns : (List String -> msg) -> Sub msg
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch 
-        [ tableState NewTableState
-        , columns NewColumns
+        [ columns NewColumns
         , data NewData
         , canHide CanHide
         , canSort CanSort
         , canFilter CanFilter
+        , sort Sort
+        , filter Filter
+        , hiddenColumns HiddenColumns
         ]
     
 

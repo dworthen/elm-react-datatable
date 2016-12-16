@@ -17,6 +17,7 @@
     "babel-loader": "*",
     "babel-preset-latest": "*",
     "babel-preset-react": "*",
+    "babel-preset-stage-0": "^6.16.0",
     "css-loader": "*",
     "elm-webpack-loader": "*",
     "file-loader": "*",
@@ -27,11 +28,19 @@
     "react": "*",
     "react-dom": "*",
     "react-elm-components": "^1.0.1",
+    "react-redux": "^5.0.1",
     "react-router": "*",
+    "redux": "^3.6.0",
     "style-loader": "*",
     "url-loader": "*",
     "webpack": "*",
     "webpack-dev-server": "*",
     "yargs": "*"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.12.2",
+    "eslint-config-defaults": "^9.0.0",
+    "eslint-plugin-react": "^6.8.0"
   }
 }

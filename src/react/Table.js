@@ -30,37 +30,35 @@ class Table extends React.Component {
         return false;
     }
 
-    constructTableState() {
-        return {
-            sortBy: this.props.sortBy,
-            sortOrder: this.props.sortOrder,
-            filters: this.props.filters,
-            hiddenColumns: this.props.hiddenColumns
-        };
-    }
-
     sendDataToElm() {
-        let ports = this.ports;
-        ports.canHide.send(this.props.canHide);
-        ports.canSort.send(this.props.canSort);
-        ports.canFilter.send(this.props.canFilter);
-        ports.columns.send(this.props.columns);
-        ports.tableState.send(this.constructTableState());
-        ports.data.send(this.props.data);
+        let {ports, props} = this;
+        ports.canHide.send(props.canHide);
+        ports.canSort.send(props.canSort);
+        ports.canFilter.send(props.canFilter);
+        ports.columns.send(props.columns);
+        ports.sort.send([props.sortBy, props.sortOrder]);
+        ports.filter.send(props.filters);
+        ports.hiddenColumns.send(props.hiddenColumns);
+        ports.data.send(props.data);
     }
 
     configurePorts(ports) {
         console.log("=== Table Component Configuring Ports ===");
-        // this.setState({
-        //     ports 
-        // });
 
         this.ports = ports;
 
         this.sendDataToElm();
 
-        ports.updateTableState.subscribe(state => {
-            ports.tableState.send(state);
+        ports.updateHiddenColumns.subscribe(newHiddenColumns => {
+            this.props.onHide(newHiddenColumns);
+        });
+
+        ports.updateSorting.subscribe(newSorting => {
+            this.props.onSort(newSorting);
+        });
+
+        ports.updateFilters.subscribe(newFilters => {
+            this.props.onFilter(newFilters);
         });
 
     }
@@ -77,15 +75,15 @@ class Table extends React.Component {
 Table.propTypes = {
     data: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string).isRequired).isRequired,
     columns: PropTypes.arrayOf(PropTypes.string).isRequired,
-    filters: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-    hiddenColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
     canHide: PropTypes.array.isRequired,
     canSort: PropTypes.array.isRequired,
     canFilter: PropTypes.array.isRequired,
+    filters: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+    hiddenColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
     sortBy: PropTypes.string.isRequired,
     sortOrder: PropTypes.string.isRequired
-}
+};
 
 
 
-export default Table
+export default Table;
