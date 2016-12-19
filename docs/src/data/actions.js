@@ -1,12 +1,4 @@
 // ACTIONS
-export const QUERY_DATA_REPORT1 = 'QUERY_DATA_REPORT1';
-export function queryDataReport1() {
-    return {
-        type: QUERY_DATA_REPORT1
-    };
-}
-
-
 export const SORT_REPORT1 = 'SORT_REPORT1';
 export function sortReport1(newSortingState) {
     return {
