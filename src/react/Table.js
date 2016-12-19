@@ -15,6 +15,45 @@ class Table extends React.Component {
         console.log("=== Table Component Mounted ===");
     }
 
+    fixTableHeader(table) {
+        if (!table || !this.props.fixHeader || this.fixed) return;
+        console.log('MOUNTING');
+        let thead = table.querySelector('thead');
+        let theadOffset = thead.getBoundingClientRect().top;
+        let tableHeight = +getComputedStyle(table)
+            .getPropertyValue('height')
+            .split('px')[0];
+        let tableOffset = table.getBoundingClientRect().top;
+        let tableCells = document.querySelectorAll('th, td');
+
+        for (var i = 0, l = tableCells.length; i < l; i++) {
+            var cell = tableCells[i];
+            cell.width = getComputedStyle(cell).getPropertyValue('width');
+        }
+
+        function fixTableHeader(e) {
+
+            let originalStyle = thead.style;
+            // If viewer has scrolled past the first row 
+            // then fix/stick it to the top of the page
+            if (window.pageYOffset > theadOffset) {
+                thead.style.position = 'fixed';
+                thead.style.top = 0;
+            }
+
+            // If viewer has scrolled back above or past the table
+            // then unfreeze the first row.
+            if (window.pageYOffset < theadOffset ||
+                window.pageYOffset > (tableOffset + tableHeight)) {
+                thead.style = originalStyle;
+            }
+
+        }
+
+        window.addEventListener('scroll', fixTableHeader, false);
+
+    }
+
     componentWillUnmount() {
         console.log("=== Table Component Unmounting ===");
     }
@@ -23,6 +62,11 @@ class Table extends React.Component {
         console.log("=== Table Component Will Recieve Props ===");
         this.props = newProps;
         this.sendDataToElm();
+        if(!this.fixed) {
+            let table = document.querySelector('.elmtable table');
+            this.fixTableHeader(table);
+            this.fixed = true;
+        }
     }
 
     shouldComponentUpdate() {
@@ -50,7 +94,7 @@ class Table extends React.Component {
         this.sendDataToElm();
 
         ports.updateHiddenColumns.subscribe(newHiddenColumns => {
-            if(this.props.onHide) {
+            if (this.props.onHide) {
                 this.props.onHide(newHiddenColumns);
             } else {
                 ports.hiddenColumns.send(newHiddenColumns);
@@ -58,7 +102,7 @@ class Table extends React.Component {
         });
 
         ports.updateSorting.subscribe(newSorting => {
-            if(this.props.onSort) {
+            if (this.props.onSort) {
                 this.props.onSort(newSorting);
             } else {
                 ports.sort.send(newSorting);
@@ -66,7 +110,7 @@ class Table extends React.Component {
         });
 
         ports.updateFilters.subscribe(newFilters => {
-            if(this.props.onFilter) {
+            if (this.props.onFilter) {
                 this.props.onFilter(newFilters);
             } else {
                 ports.filter.send(newFilters);
@@ -77,11 +121,11 @@ class Table extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="elmtable">
                 <Elm src={Main} ports={this.configurePorts.bind(this)} />
             </div>
         );
-    } 
+    }
 }
 
 Table.propTypes = {
@@ -96,7 +140,8 @@ Table.propTypes = {
     sortOrder: PropTypes.string.isRequired,
     onHide: PropTypes.func,
     onSort: PropTypes.func,
-    onFilter: PropTypes.func
+    onFilter: PropTypes.func,
+    fixHeader: PropTypes.bool
 };
 
 

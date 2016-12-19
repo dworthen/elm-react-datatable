@@ -1,0 +1,37 @@
+.datatablewidget {
+width: 100%;
+}
+
+.itemsperpage, .paginate, .showallcolumns {
+float: left;
+min-width: 300px;
+}
+
+.itemsperpage .Select, .paginate .Select {
+max-width: 150px;
+}
+
+.elmtable thead  {
+background: #fff;
+}
+
+.column-close, .column-title, .column-sort {
+display: block;
+float: left;
+}
+
+.column-title {
+width: 80%;
+text-align: center;
+}
+
+.datatablesettings:after, elmtable th:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+	}
+* html .datatablesettings           { zoom: 1; } /* IE6 */
+*:first-child+html .datatablesettings { zoom: 1; } /* IE7 */

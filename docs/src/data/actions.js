@@ -25,3 +25,32 @@ export function hideColumnsReport1(newHiddenColumnsState) {
         data: { hiddenColumns: newHiddenColumnsState }
     };
 }
+
+
+export const CHANGE_ACTIVE_PAGE_REPORT1 = 'CHANGE_ACTIVE_PAGE_REPORT1';
+export function changeActivePageReport1(newPAge) {
+    return {
+        type: CHANGE_ACTIVE_PAGE_REPORT1,
+        data: { 
+                activePage: newPAge
+            }
+    };
+}
+
+export const CHANGE_PAGE_SIZE_REPORT1 = 'CHANGE_PAGE_SIZE_REPORT1';
+export function changePageSizeReport1(newPageSize) {
+    return {
+        type: CHANGE_PAGE_SIZE_REPORT1,
+        data: { 
+                pageSize: newPageSize
+            }
+    };
+}
+
+
+export const SHOW_ALL_COLUMNS_REPORT1 = 'SHOW_ALL_COLUMNS_REPORT1';
+export function showAllColumnsReport1() {
+    return {
+        type: SHOW_ALL_COLUMNS_REPORT1
+    };
+}

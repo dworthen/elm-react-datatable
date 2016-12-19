@@ -1,9 +1,12 @@
 import { connect } from 'react-redux';
-import Table from '../../src/react/Table';
+import DataTable from '../../src/react/DataTable';
 import { 
     sortReport1, 
     filterReport1, 
-    hideColumnsReport1 
+    hideColumnsReport1,
+    changePageSizeReport1,
+    changeActivePageReport1,
+    showAllColumnsReport1 
 } from './data/actions';
 
 // Applies every filter to every row.
@@ -63,13 +66,20 @@ const mapStateToProps = (store) => {
     let filterFn = filterData.bind(this, keyedFilters);
     let sortComparator = toSortComparator(sortBy, columns);
 
-
-    return {
-        data: data
+    let queriedData = data
             .toSeq()
             .map(row => row.map(val => val.toString()))
             .sortBy(sortComparator, sorter(sortOrder))
-            .filter(filterFn)
+            .filter(filterFn);
+
+    let numberOfPages = Math.ceil(queriedData.count() / pageSize);
+
+    return {
+        data: queriedData
+            // .toSeq()
+            // .map(row => row.map(val => val.toString()))
+            // .sortBy(sortComparator, sorter(sortOrder))
+            // .filter(filterFn)
             .skip(pageSize * (activePage - 1))
             .take(pageSize)
             .toJS(),
@@ -77,7 +87,11 @@ const mapStateToProps = (store) => {
         filters: [],
         hiddenColumns: hiddenColumns.toJS(),
         sortBy,
-        sortOrder
+        sortOrder,
+        pageSize,
+        pageSizeOptions: [2, 5, 25, 50],
+        activePage,
+        numberOfPages: numberOfPages || 1
     };
 };
 
@@ -92,13 +106,22 @@ const mapDispatchToProps = (dispatch) => {
         },
         onHide: (newHiddenColumnsState) => {
             dispatch(hideColumnsReport1(newHiddenColumnsState));
-        }
+        },
+        pageSizeChange: (newPageSize) => {
+           dispatch(changePageSizeReport1(newPageSize.value));
+       },
+       paginateChange: (newPage) => {
+           dispatch(changeActivePageReport1(newPage.value));
+       },
+       showAllColumnsClick: () => {
+           dispatch(showAllColumnsReport1());
+       }
     };
 };
 
-const TableContainer = connect(
+const DataTableContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(Table);
+)(DataTable);
 
-export default TableContainer;
+export default DataTableContainer;
