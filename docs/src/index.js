@@ -2,10 +2,10 @@ import React from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import reducers from './src/react/data/reducers';
+import reducers from './data/reducers';
 
-import Table from './src/react/Table';
-import TableContainer from './src/react/TableContainer';
+import Table from '../../src/react/Table';
+import TableContainer from './TableContainer';
 
 let store = createStore(reducers);
 
@@ -35,6 +35,8 @@ class App extends React.Component {
                     canHide={[true, ""]}
                     canSort={[true, ""]}
                     canFilter={[true, ""]}
+                    sortBy="Year"
+                    sortOrder="Asc"
                 />
             </div>
         );

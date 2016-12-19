@@ -114,7 +114,7 @@ updateColumns viewConfig columns =
 
 -- PORTS
 
-port updateSorting : { sortBy: String, sortOrder: String } -> Cmd msg
+port updateSorting : (String, String) -> Cmd msg
 port updateFilters : List (String, String) -> Cmd msg
 port updateHiddenColumns : List String -> Cmd msg
 
@@ -197,10 +197,7 @@ update msg model =
 letTheWorldKnowTheTableStateUpdated : Table.State -> Table.State -> Cmd Msg
 letTheWorldKnowTheTableStateUpdated currentState newState =
     if currentState.sortBy /= newState.sortBy || currentState.sortOrder /= newState.sortOrder then
-        updateSorting {
-            sortBy = newState.sortBy,
-            sortOrder = sortOrderToString newState.sortOrder 
-        }
+        updateSorting (newState.sortBy, sortOrderToString newState.sortOrder)
     else if currentState.filters /= newState.filters then
         updateFilters newState.filters
     else if currentState.hiddenColumns /= newState.hiddenColumns then

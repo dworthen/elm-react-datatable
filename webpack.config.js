@@ -4,7 +4,7 @@ var argv = require('yargs').argv;
 module.exports = {
     context: __dirname,
     devtool: argv.hot ? "#eval" : "#source-map",
-    entry: argv.hot ? './index.js' : './src/index.js',
+    entry: argv.hot ? './docs/src/index.js' : './src/index.js',
     output: {
         filename: argv.hot ? './docs/client.min.js' : './dist/elm-react-datatable.js',
         library: !argv.hot ? 'elm-react-datatable' : undefined,

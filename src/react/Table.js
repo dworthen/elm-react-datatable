@@ -50,15 +50,27 @@ class Table extends React.Component {
         this.sendDataToElm();
 
         ports.updateHiddenColumns.subscribe(newHiddenColumns => {
-            this.props.onHide(newHiddenColumns);
+            if(this.props.onHide) {
+                this.props.onHide(newHiddenColumns);
+            } else {
+                ports.hiddenColumns.send(newHiddenColumns);
+            }
         });
 
         ports.updateSorting.subscribe(newSorting => {
-            this.props.onSort(newSorting);
+            if(this.props.onSort) {
+                this.props.onSort(newSorting);
+            } else {
+                ports.sort.send(newSorting);
+            }
         });
 
         ports.updateFilters.subscribe(newFilters => {
-            this.props.onFilter(newFilters);
+            if(this.props.onFilter) {
+                this.props.onFilter(newFilters);
+            } else {
+                ports.filter.send(newFilters);
+            }
         });
 
     }
@@ -81,7 +93,10 @@ Table.propTypes = {
     filters: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
     hiddenColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
     sortBy: PropTypes.string.isRequired,
-    sortOrder: PropTypes.string.isRequired
+    sortOrder: PropTypes.string.isRequired,
+    onHide: PropTypes.func,
+    onSort: PropTypes.func,
+    onFilter: PropTypes.func
 };
 
 
