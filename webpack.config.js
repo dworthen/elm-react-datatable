@@ -8,7 +8,7 @@ module.exports = {
     output: {
         filename: argv.hot ? './docs/client.min.js' : './dist/elm-react-datatable.js',
         library: !argv.hot ? 'elm-react-datatable' : undefined,
-        libraryTarget: !argv.hot ? 'commonjs' : undefined // or commonjs2
+        libraryTarget: !argv.hot ? 'commonjs2' : undefined // or commonjs2
     },
     externals: argv.hot ? undefined : {
         'react': 'react',
