@@ -10,9 +10,14 @@ module.exports = {
         library: !argv.hot ? 'elm-react-datatable' : undefined,
         libraryTarget: !argv.hot ? 'commonjs' : undefined // or commonjs2
     },
-    plugins: [
+    externals: argv.hot ? undefined : {
+        'react': 'react',
+        'react-dom': 'react-dom',
+        'react-router': 'react-router'
+    },
+    plugins: argv.hot ? [
         new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } })
-    ],
+    ] : undefined,
     module: {
         loaders: [
             {
