@@ -42,8 +42,8 @@ class DataTable extends React.Component {
         }
 
         return (
-            <div className="datatablewidget">
-                <div className="datatablesettings">
+            <div className="datatable-widget">
+                <div className="datatable-settings">
                     {pageSize}
                     {paginate}
                     {showAllColumns}

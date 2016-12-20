@@ -10,7 +10,7 @@ class ShowAllColumns extends React.Component {
 
     render() {
         return (
-            <div className="showallcolumns">
+            <div className="show-columns">
                 <button onClick={this.props.onClick}>{this.props.children}</button>
             </div>
         );

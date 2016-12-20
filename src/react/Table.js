@@ -63,7 +63,7 @@ class Table extends React.Component {
         this.props = newProps;
         this.sendDataToElm();
         if(!this.fixed) {
-            let table = document.querySelector('.elmtable table');
+            let table = document.querySelector('.elm-table-ya table');
             this.fixTableHeader(table);
             this.fixed = true;
         }
@@ -121,7 +121,7 @@ class Table extends React.Component {
 
     render() {
         return (
-            <div className="elmtable">
+            <div className="elm-table-ya">
                 <Elm src={Main} ports={this.configurePorts.bind(this)} />
             </div>
         );

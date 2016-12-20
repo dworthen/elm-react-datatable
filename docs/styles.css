@@ -1,17 +1,22 @@
-.datatablewidget {
+.datatable-widget {
 width: 100%;
 }
 
-.itemsperpage, .paginate, .showallcolumns {
+.datatable-settings {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.page-size, .paginate, .show-columns {
 float: left;
 min-width: 300px;
 }
 
-.itemsperpage .Select, .paginate .Select {
+.page-size .Select, .paginate .Select {
 max-width: 150px;
 }
 
-.elmtable thead  {
+.elm-table-ya thead  {
 background: #fff;
 }
 
@@ -25,7 +30,7 @@ width: 80%;
 text-align: center;
 }
 
-.datatablesettings:after, elmtable th:after {
+.datatable-settings:after, elm-table-ya th:after {
 	visibility: hidden;
 	display: block;
 	font-size: 0;
@@ -33,5 +38,5 @@ text-align: center;
 	clear: both;
 	height: 0;
 	}
-* html .datatablesettings           { zoom: 1; } /* IE6 */
-*:first-child+html .datatablesettings { zoom: 1; } /* IE7 */
+* html .datatable-settings           { zoom: 1; } /* IE6 */
+*:first-child+html .datatable-settings { zoom: 1; } /* IE7 */

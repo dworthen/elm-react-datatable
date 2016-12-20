@@ -14,13 +14,13 @@ import {
 const initialReport1StateJS = {
     pageSize: 2,
     activePage: 1,
-    columns: ["Names", "Years"],
+    columns: ["Names", "Years", "More Info Please"],
     data: [
-        ["George Washington", 1732]
-        , ["John Adams", 1735]
-        , ["Thomas Jefferson", 1743]
-        , ["Ander Jackson", 1767]
-        , ["William Henry Harrison", 1773]
+        ["George Washington", 1732, 5]
+        , ["John Adams", 1735, 6]
+        , ["Thomas Jefferson", 1743, 7]
+        , ["Ander Jackson", 1767, 8]
+        , ["William Henry Harrison", 1773, 9]
     ],
     filters: [],
     hiddenColumns: [],

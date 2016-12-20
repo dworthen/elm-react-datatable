@@ -20,8 +20,7 @@ class PageSize extends React.Component {
         });
 
         return (
-            <div className="itemsperpage">
-                <span>Items per page:</span>
+            <div className="page-size">
                 <Select
                     clearable={false}
                     name={this.props.name}
