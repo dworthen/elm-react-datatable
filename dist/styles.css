@@ -1,0 +1,42 @@
+.datatable-widget {
+width: 100%;
+}
+
+.datatable-settings {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.page-size, .paginate, .show-columns {
+float: left;
+min-width: 300px;
+}
+
+.page-size .Select, .paginate .Select {
+max-width: 150px;
+}
+
+.elm-table-ya thead  {
+background: #fff;
+}
+
+.column-close, .column-title, .column-sort {
+display: block;
+float: left;
+}
+
+.column-title {
+width: 80%;
+text-align: center;
+}
+
+.datatable-settings:after, elm-table-ya th:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+	}
+* html .datatable-settings           { zoom: 1; } /* IE6 */
+*:first-child+html .datatable-settings { zoom: 1; } /* IE7 */
