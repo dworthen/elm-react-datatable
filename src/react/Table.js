@@ -109,12 +109,24 @@ class Table extends React.Component {
             }
         });
 
+        this.filters = {};
+
         ports.updateFilters.subscribe(newFilters => {
-            if (this.props.onFilter) {
-                this.props.onFilter(newFilters);
-            } else {
-                ports.filter.send(newFilters);
-            }
+            newFilters.forEach(([key, val]) => {
+                this.filters[key] = val;
+            });
+            setTimeout(() => {
+                let update = newFilters.every(([key, val]) => {
+                    return this.filters[key] == val ? true : false;
+                });
+                if(update) {
+                    if (this.props.onFilter) {
+                        this.props.onFilter(newFilters);
+                    } else {
+                        ports.filter.send(newFilters);
+                    }
+                }
+            }, 700);
         });
 
     }
